@@ -1,5 +1,11 @@
 # Specular Polynomials
 
+Zhimin Fan, Jie Guo, Yiming Wang, Tianyu Xiao, Hao Zhang
+
+Chenxi Zhou, Zhenyu Chen, Pengpei Hong, Yanwen Guo, Ling-Qi Yan
+
+*ACM Transactions on Graphics (Proceedings of SIGGRAPH 2024)*
+
 A reformulation of specular constraints into polynomial systems that enables efficiently finding a complete set of all admissible specular paths connecting two arbitrary endpoints in a scene, by converting the problem into finding zeros of the determinant of univariate matrix polynomials.
 
 ![repre](repre.jpg)
