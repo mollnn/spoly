@@ -24,4 +24,8 @@ Our solution is generic, completely deterministic, accurate for the case of one 
 
 ## Links
 
-Paper and code: coming soon
+[Paper](https://zhiminfan.work/paper/spoly_preprint.pdf)
+[Supplemental](https://zhiminfan.work/paper/spoly_preprint_supp.pdf)
+
+
+Code: coming soon
