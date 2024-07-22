@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<scene version="0.6.0">
+
+	<default name="useResultant" value="false" />
+	<default name="methodMask" value="0" />
+	<default name="useDepthCheck" value="true" />
+	<default name="pathType" value="1" />
+	<default name="spp" value="16"/>
+	<include filename="include/mytestcau_mts1core_tiny.xml"/>
+
+	<integrator type="path_cuts_path">
+		<integer name="maxDepth" value="4"/>
+		<boolean name="useResultant" value="$useResultant"/>
+		<integer name="methodMask" value="$methodMask"/>
+		<boolean name="useDepthCheck" value="$useDepthCheck"/>
+		<integer name="pathType" value="$pathType"/>
+		<integer name="pathcutBounce" value="1"/>
+		<integer name="cutoffMatrix" value="4"/>
+		<integer name="cutoffResultant" value="8"/>
+		<float name="pathcutThres" value="0.00001"/>
+	</integrator>
+</scene>

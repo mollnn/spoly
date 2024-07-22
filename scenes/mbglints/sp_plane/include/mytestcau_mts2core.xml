@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<scene version="2.0.0">
+	<default name="spp" value="2"/>
+	<default name="multiEmitter" value="false"/>
+
+	<bsdf type="conductor" id="metal">
+		<string name="material" value="Au"/>
+	</bsdf>
+    
+	<sensor type="perspective">
+		<float name="fov" value="36"/>
+		<transform name="to_world">
+			<lookat target="-0.3, 0.6, 1.3" origin="-2, 6.5, 6" up="0, 0.2, 0"/>
+		</transform>
+		<sampler type="independent">
+			<integer name="sample_count" value="$spp"/>
+		</sampler>
+		<film type="hdrfilm">
+			<integer name="height" value="512"/>
+			<integer name="width" value="512"/>
+			<rfilter type="gaussian"/>
+		</film>
+	</sensor>
+
+	<!-- <emitter type="point">
+		<transform name="to_world">
+			<translate x="3" y="3" z="5"/>
+		</transform>
+		<spectrum name="intensity" value="100"/>
+        <boolean name="caustic_emitter_single" value="true"/>
+        <boolean name="caustic_emitter_multi" value="true"/>
+	</emitter>   -->
+
+	<shape type="rectangle">
+		<emitter type="area">
+			<spectrum name="radiance" value="24000"/>
+					<boolean name="caustic_emitter_single" value="true"/>
+        <boolean name="caustic_emitter_multi" value="true"/>
+		</emitter>  
+		<transform name="to_world">
+			<rotate x="-1" angle="180"/>
+
+			<scale value="0.05"/>
+			<translate x="3" y="3" z="7"/>
+		</transform>
+
+	</shape>  
+
+	<shape type="obj">
+		<string name="filename" value="../mesh/slab1ss.obj"/>
+		<transform name="to_world">
+			<translate x="0" y="1" z="0"/>
+		</transform>
+		<ref id="metal"/>
+        <boolean name="caustic_caster_single" value="true"/>
+        <boolean name="caustic_caster_multi" value="true"/>
+	</shape>
+
+	<shape type="rectangle">
+		<transform name="to_world">
+			<scale value="8"/>
+			<rotate x="1" y="0" z="0" angle="-90"/>
+		</transform>
+		<bsdf type="diffuse">
+			<spectrum name="reflectance" type="bitmap">
+				<string name="filename" value="../textures/Tiles71_col.jpg" />
+				<transform name="to_uv">
+					<scale x="3" y="3"/>
+				</transform>
+			</spectrum>
+		</bsdf>
+        <boolean name="caustic_receiver" value="true"/>
+	</shape>
+
+</scene>

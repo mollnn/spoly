@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<scene version="0.6.0">
+	<default name="useResultant" value="false" />
+	<default name="methodMask" value="0" />
+	<default name="spp" value="99999"/>
+	<include filename="include/mytestcau_mts1core.xml"/>
+
+	<integrator type="guided_path_m17">
+		<string name="budgetType" value="spp"/>
+		<integer name="maxDepth" value="4"/>
+		<float name="budget" value="103"/>
+
+		<string name="nee" value="always"/>
+        <string name="sampleCombination" value="inversevar"/>
+		<string name="bsdfSamplingFractionLoss" value="kl"/>
+		<string name="spatialFilter" value="stochastic"/>
+		<string name="directionalFilter" value="box"/>
+		<integer name="sTreeThreshold" value="4000"/>
+		<integer name="sppPerPass" value="1"/>
+	</integrator>
+
+</scene>

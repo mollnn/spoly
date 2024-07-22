@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<scene version="0.6.0">
+	<integrator type="path">
+		<integer name="maxDepth" value="8"/>
+	</integrator>
+
+	<sensor type="perspective">
+		<float name="fov" value="50"/>
+		<string name="fovAxis" value="x"/>
+		<float name="nearClip" value="0.1"/>
+		<transform name="toWorld">
+			<lookat target="0, 0, 0" origin="0 , 5.48336 , 1.2 " up="1, 0, 0"/>
+		</transform>
+
+		<sampler type="ldsampler">
+			<integer name="sampleCount" value="8"/>
+		</sampler>
+
+		<film type="hdrfilm">
+			<integer name="height" value="256"/>
+			<integer name="width" value="256"/>
+			<rfilter type="tent"/>
+		</film>
+	</sensor>
+
+	<emitter type="point">
+		<transform name="toWorld">
+			<translate x="0.1" y="3" z="1"/>
+		</transform>
+		
+		<spectrum name="intensity" value="360"/>
+	</emitter>  
+
+	<bsdf type="conductor" id="metal">
+		<string name="material" value="Al"/>
+	</bsdf>
+
+	<texture type="scale" id="surface">
+		<float name="scale" value="0.5"/>
+		<texture name="reflectance" type="bitmap">
+			<string name="filename" value="../textures/Chocolate__color.png"/>
+		</texture>
+    </texture>
+	
+
+	<bsdf type="diffuse" id="chocolate">
+		<texture name="reflectance" type="bitmap">
+			<string name="filename" value="../textures/Chocolate__color.png"/>
+		</texture>
+	</bsdf>
+
+
+
+
+	<float name="scale_value" value="1"/>
+	<shape type="obj">
+		<string name="filename" value="mesh/tinfoil.obj"/>
+		<ref id="metal"/>
+		<transform name="toWorld">
+			<scale value="$scale_value"/>
+		</transform>	
+	</shape>
+	
+
+	<shape type="obj">
+		<string name="filename" value="mesh/chocolate2.obj"/>
+		<ref id="chocolate"/>
+	</shape>
+
+	<shape type="obj">
+		<string name="filename" value="mesh/desktopwooden.obj"/>
+		<bsdf type="diffuse" name="wooden">
+			<texture name="reflectance" type="bitmap">
+            	<string name="filename" value="textures/05009_Lulea_Birke_L126193_05.jpg"/>
+        	</texture>
+        </bsdf>
+	</shape>
+<!--
+	<shape type="sphere">
+		<transform name="toWorld">
+			<scale value="1000"/>
+			<translate y="-1000"/>
+		</transform>
+	</shape>
+-->
+	
+<!--
+	<emitter type="constant">
+        <spectrum name="radiance" value="4.0" /> 
+    </emitter>
+-->
+
+	<emitter type="sky"/>
+
+</scene>

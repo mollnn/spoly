@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<scene version="0.6.0">
+	<default name="useResultant" value="false" />
+	<default name="methodMask" value="0" />
+	<default name="spp" value="499"/>
+	<include filename="include/mytestcau_mts1core.xml"/>
+
+	<integrator type="path">
+		<integer name="maxDepth" value="4"/>
+	</integrator>
+
+
+
+</scene>

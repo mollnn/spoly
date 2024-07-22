@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<scene version="0.6.0">
+
+	<include filename="include/mytestcau_mts1core.xml"/>
+	<default name="useResultant" value="false" />
+	<default name="methodMask" value="0" />
+	<default name="spp" value="99999" />
+
+	<integrator type="mlt">
+        <integer name="maxDepth" value="4"/>
+        <boolean name="manifoldPerturbation" value="true"/>
+	</integrator>
+
+
+	<!-- <sensor type="perspective">
+		<float name="fov" value="32"/>
+		<string name="fovAxis" value="x"/>
+		<float name="nearClip" value="0.1"/>
+		<transform name="toWorld">
+			<lookat target="-0.3, 0.6, 0" origin="-2, 3, 5" up="0, 0.2, 0"/>
+		</transform>
+
+		<sampler type="independent">
+			<integer name="sampleCount" value="2"/>
+		</sampler>
+
+		<film type="hdrfilm">
+			<integer name="height" value="512"/>
+			<integer name="width" value="512"/>
+			<rfilter type="gaussian"/>
+			<boolean name="banner" value="false"/>
+		</film>
+	</sensor> -->
+
+	<!-- <emitter type="point">
+		<transform name="toWorld">
+			<translate x="3" y="3" z="5"/>
+		</transform>
+		<spectrum name="intensity" value="500"/>
+	</emitter>   -->
+	 <!-- <bsdf type="conductor" id="metal">
+		<string name="material" value="Al"/>
+	</bsdf>  -->
+    
+
+	<!-- <shape type="obj">
+		<string name="filename" value="mesh/slab1ss.obj"/>
+		<transform name="toWorld">
+			<translate x="0" y="1" z="0"/>
+		</transform>
+		<ref id="metal"/>
+	</shape> -->
+<!-- 
+	<shape type="obj">
+		<string name="filename" value="mesh/slab1ssborder.obj"/>
+		<transform name="toWorld">
+			<translate x="0" y="1" z="0"/>
+		</transform>
+		<bsdf type="diffuse"/>
+	</shape> -->
+
+	<!-- <shape type="rectangle">
+		<transform name="toWorld">
+			<scale value="5"/>
+			<rotate x="1" y="0" z="0" angle="-90"/>
+		</transform>
+		<bsdf type="diffuse">
+		<texture name="reflectance" type="scale">
+			<float name="scale" value="1"/>
+			<texture type="bitmap">
+				<string name="filename" value="textures/Wood030_2K_Color.jpg"/>
+			</texture>
+		</texture>
+		</bsdf>
+	</shape> -->
+</scene>

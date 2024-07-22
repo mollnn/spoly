@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<scene version="0.6.0">
+	<integrator type="path">
+		<integer name="maxDepth" value="10"/>
+	</integrator>
+
+	<sensor type="perspective">
+		<float name="fov" value="60"/>
+		<string name="fovAxis" value="x"/>
+		<float name="nearClip" value="0.1"/>
+		<transform name="toWorld">
+			<lookat target="0, 0, 0" origin="0, 2.6, 1.1" up="0, 1, 0"/>
+		</transform>
+
+		<sampler type="ldsampler">
+			<integer name="sampleCount" value="64"/>
+		</sampler>
+
+		<film type="hdrfilm">
+			<integer name="height" value="256"/>
+			<integer name="width" value="256"/>
+			<rfilter type="gaussian"/>
+			<boolean name="banner" value="false"/>
+		</film>
+	</sensor>
+
+	<emitter type="point">
+		<transform name="toWorld">
+			<translate x="0.01" y="5" z="0.01"/>
+		</transform>
+		
+		<spectrum name="intensity" value="80"/>
+	</emitter>  
+
+	<!-- <shape type="sphere">
+		<transform name="toWorld">
+			<scale value="0.1"/>
+			<translate x="0" y="5.11" z="0"/>
+		</transform>
+		<emitter type="area">
+			<rgb name="radiance" value="0, 0, 1000"/>
+		</emitter>  
+	</shape>   -->
+
+	<bsdf type="conductor" id="metal">
+		<string name="material" value="Cu"/>
+	</bsdf>
+<!-- 
+	<bsdf type="roughconductor" id="metal">
+		<string name="material" value="Cu"/>
+		<float name="alpha" value="0.01"/>
+	</bsdf> -->
+
+	<shape type="obj">
+		<string name="filename" value="../mesh/tinfoil2ss.obj"/>
+		<ref id="metal"/>
+	</shape>
+
+
+	<bsdf type="diffuse" id="chocolate">
+		<texture name="reflectance" type="scale">
+			<float name="scale" value="0.2"/>
+			<texture type="bitmap">
+				<string name="filename" value="../textures/Chocolate__color.png"/>
+			</texture>
+		</texture>
+	</bsdf>
+
+        <bsdf type="diffuse" id="wood">
+            
+            <texture name="reflectance" type="bitmap">
+                <string name="filename" value="../textures/wood1.jpg"/>
+                <float name="uscale" value="1000"/>
+                <float name="vscale" value="1000"/>
+            </texture>
+        </bsdf>
+
+	<shape type="rectangle">
+		<transform name="toWorld">
+			<scale value="1000"/>
+			<translate y="0"/>
+			<rotate x="1" angle="-90"/>
+		</transform>
+		<ref id="wood"/>
+	</shape>
+	<emitter type="sky">
+		<float name="hour" value="16"/>
+		<float name="turbidity" value="10"/>
+	</emitter>
+
+	
+</scene>

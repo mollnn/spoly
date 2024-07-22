@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<scene version="0.6.0">
+	<default name="useResultant" value="false" />
+	<default name="methodMask" value="0" />
+	<default name="spp" value="1"/>
+
+	<sensor type="perspective">
+		<float name="fov" value="32"/>
+		<string name="fovAxis" value="x"/>
+		<float name="nearClip" value="0.1"/>
+		<transform name="toWorld">
+			<lookat target="-0.3, 0.6, 0" origin="-2, 3, 5" up="0, 0.2, 0"/>
+		</transform>
+
+		<sampler type="independent">
+			<integer name="sampleCount" value="$spp"/>
+		</sampler>
+
+		<film type="hdrfilm">
+			<integer name="height" value="512"/>
+			<integer name="width" value="512"/>
+			<rfilter type="gaussian"/>
+			<boolean name="banner" value="false"/>
+	</film>
+	</sensor>
+    <!-- <emitter type="point">
+		<transform name="toWorld">
+			<translate x="3" y="3" z="5"/>
+		</transform>
+		<spectrum name="intensity" value="100"/>
+	</emitter>  -->
+	
+	<shape type="rectangle">
+		<emitter type="area">
+			<spectrum name="radiance" value="15000"/>
+		</emitter>  
+		<transform name="toWorld">
+			<rotate x="-1" angle="180"/>
+			<scale value="0.05"/>
+			<translate x="3" y="3" z="5"/>
+		</transform>
+	</shape>  
+
+
+
+
+	 <bsdf type="conductor" id="metal">
+		<string name="material" value="Au"/>
+	</bsdf> 
+
+	<shape type="obj">
+		<string name="filename" value="../mesh/slab1sss.obj"/>
+		<transform name="toWorld">
+			<!-- <scale z="-1"/> -->
+			<translate x="0" y="1" z="0"/>
+		</transform>
+		<ref id="metal"/>
+	</shape>
+
+
+	<shape type="rectangle">
+		<transform name="toWorld">
+			<scale value="8"/>
+			<rotate x="1" y="0" z="0" angle="-90"/>
+		</transform>
+		<bsdf type="diffuse">
+		<texture name="reflectance" type="scale">
+			<float name="scale" value="1"/>
+			<texture type="bitmap">
+				<string name="filename" value="../textures/Tiles71_col.jpg"/>
+				<float name="uscale" value="3"/>
+				<float name="vscale" value="3"/>
+			</texture>
+		</texture>
+		</bsdf>
+	</shape>
+</scene>
