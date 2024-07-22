@@ -13,9 +13,9 @@ A reformulation of specular constraints into polynomial systems that enables eff
 
 We provide a minimalist demo: **a single** cpp source file `standalone.cpp` that only relies on the C++ standard libraries, which could help you understand how the method works without diving into the full project.
 
-Just build it with any modern C++ compiler (g++, msvc, ...) and check how the vertex info of triangles are changed into bivariate polynomials and univariate polynomial matrices.
+Just build it with any modern C++ compiler (g++, msvc, ...) and check how the vertex info of triangles are transformed into the coefficients of bivariate polynomials and univariate polynomial matrices.
 
-## Build the full project
+## Build the complete project
 
 ```
 cd mts1
