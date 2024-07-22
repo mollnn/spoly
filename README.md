@@ -8,7 +8,6 @@ Chenxi Zhou, Zhenyu Chen, Pengpei Hong, Yanwen Guo, Ling-Qi Yan
 
 A reformulation of specular constraints into polynomial systems that enables efficiently finding a complete set of all admissible specular paths connecting two arbitrary endpoints in a scene, by converting the problem into finding zeros of the determinant of univariate matrix polynomials.
 
-![repre](repre.jpg)
 
 ## Standalone demo
 
@@ -42,6 +41,8 @@ Currently, in this repo, only single reflection (R) is fully supported. Other ca
 Note that although the current code contains implementations for other cases and even alternative building blocks for some parts of the pipeline, they are NOT guaranteed to be correct/complete.
 
 ---
+
+![repre](repre.jpg)
 
 ## Abstract
 
