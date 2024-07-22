@@ -27,5 +27,26 @@ Our solution is generic, completely deterministic, accurate for the case of one 
 [Paper](https://zhiminfan.work/paper/spoly_preprint.pdf)
 [Supplemental](https://zhiminfan.work/paper/spoly_preprint_supp.pdf)
 
+## Build 
 
-Code: coming soon
+```
+mkdir cbuild
+cd cbuild
+cmake ..
+```
+
+Then build the generated project in `cbuild`.
+
+Tested on Windows 10, Visual Studio 2022.
+
+The implementation builds upon [Mbglints](https://github.com/wangningbei/mbglints) and [CyPolynomials](http://codebase.cemyuksel.com/code.html). 
+
+## Reproduce
+
+We provide several experiments in the `test` dir. Just run them and check the results. Please refer to any additional comments in the scripts.
+
+---
+
+Currently, in this repo, only single reflection (R) is fully supported. Other cases will be available soon. 
+
+Note that although the current code contains implementations for other cases and even alternative building blocks for some parts of the pipeline, they are NOT guaranteed to be correct/complete.
