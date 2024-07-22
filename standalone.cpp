@@ -603,14 +603,14 @@ int main()
     BVP3 xD = pD;
     BVP3 xL = pL;
     BVP3 x1 = p10 + p11 * u1 + p12 * v1;
-    BVP3 n1hat = n10 + n11 * u1 + n12 * v1;
+    BVP3 n1_scaled = n10 + n11 * u1 + n12 * v1;
 
     // The two polynomials we want to generate. Don't care the name.
     BVP Czy;
     BVP Cxz;
 
-    BVP u2hat;
-    BVP v2hat;
+    BVP u2_scaled;
+    BVP v2_scaled;
     BVP kappa2;
 
     //////////////////////////////////////////////////
@@ -623,8 +623,8 @@ int main()
     // BVP3 d1 = xL - x1;
     // BVP d0_norm2 = d0.dot(d0);
     // BVP d1_norm2 = d1.dot(d1);
-    // BVP3 c0 = d0.cross(n1hat);
-    // BVP3 c1 = d1.cross(n1hat);
+    // BVP3 c0 = d0.cross(n1_scaled);
+    // BVP3 c1 = d1.cross(n1_scaled);
     // BVP3 c = c0 * c0 * d1_norm2 - c1 * c1 * d0_norm2;
     // Czy = c.bvp[0];
     // Cxz = c.bvp[1];
@@ -634,15 +634,15 @@ int main()
 
     // BVP3 d0 = x1 - xD;
     // BVP3 d1 = xL - x1;
-    // BVP d0_dot_n1hat = d0.dot(n1hat);
-    // BVP d1_dot_n1hat = d1.dot(n1hat);
-    // BVP3 t1hat1 = n1hat.cross(p11);
-    // BVP3 t1hat2 = n1hat.cross(p12);
-    // BVP d0_dot_t1hat2 = d0.dot(t1hat2);
-    // BVP d1_dot_t1hat2 = d1.dot(t1hat2);
-    // Czy = d0_dot_n1hat * d1_dot_t1hat2 + d0_dot_t1hat2 * d1_dot_n1hat;
+    // BVP d0_dot_n1_scaled = d0.dot(n1_scaled);
+    // BVP d1_dot_n1_scaled = d1.dot(n1_scaled);
+    // BVP3 t1_scaled1 = n1_scaled.cross(p11);
+    // BVP3 t1_scaled2 = n1_scaled.cross(p12);
+    // BVP d0_dot_t1_scaled2 = d0.dot(t1_scaled2);
+    // BVP d1_dot_t1_scaled2 = d1.dot(t1_scaled2);
+    // Czy = d0_dot_n1_scaled * d1_dot_t1_scaled2 + d0_dot_t1_scaled2 * d1_dot_n1_scaled;
     // BVP3 s = xL - xD;
-    // BVP3 cop = (d0.cross(s)).cross(n1hat.cross(s));
+    // BVP3 cop = (d0.cross(s)).cross(n1_scaled.cross(s));
     // Cxz = cop.bvp[0];
 
     ///////////////////////////////////
@@ -652,8 +652,8 @@ int main()
     // BVP3 d1 = xL - x1;
     // BVP d0_norm2 = d0.dot(d0);
     // BVP d1_norm2 = d1.dot(d1);
-    // BVP3 c0 = d0.cross(n1hat);
-    // BVP3 c1 = d1.cross(n1hat);
+    // BVP3 c0 = d0.cross(n1_scaled);
+    // BVP3 c1 = d1.cross(n1_scaled);
     // BVP3 c = c0 * c0 * d1_norm2 - c1 * c1 * d0_norm2 * BVP(1, eta * eta) ;
     // Czy = c.bvp[0];
     // Cxz = c.bvp[1];
@@ -661,20 +661,20 @@ int main()
     ///////////////////////////////////
     // RR: 15 degree form
     BVP3 d0 = x1 - xD;
-    BVP3 omega1hat = d0 * (n1hat.dot(n1hat)) - n1hat * (n1hat.dot(d0)) * BVP(1, 2);
-    u2hat = omega1hat.cross(p22).dot(x1 - p20);
-    v2hat = (x1 - p20).cross(p21).dot(omega1hat);
-    kappa2 = omega1hat.cross(p22).dot(p21);
-    BVP3 x2hat = p20 * kappa2 + p21 * u2hat + p22 * v2hat;
-    BVP3 d2hat = xL * kappa2 - x2hat;
-    BVP3 n2hat = n20 * kappa2 + n21 * u2hat + n22 * v2hat;
-    BVP3 t21hat = n2hat.cross(p21);
-    BVP3 t22hat = n2hat.cross(p22);
-    BVP omega1hat_dot_n2hat = omega1hat.dot(n2hat);
-    BVP d2hat_dot_n2hat = d2hat.dot(n2hat);
-    Czy = omega1hat_dot_n2hat * (d2hat.dot(t22hat)) + d2hat_dot_n2hat * (omega1hat.dot(t22hat));
+    BVP3 omega1_scaled = d0 * (n1_scaled.dot(n1_scaled)) - n1_scaled * (n1_scaled.dot(d0)) * BVP(1, 2);
+    u2_scaled = omega1_scaled.cross(p22).dot(x1 - p20);
+    v2_scaled = (x1 - p20).cross(p21).dot(omega1_scaled);
+    kappa2 = omega1_scaled.cross(p22).dot(p21);
+    BVP3 x2_scaled = p20 * kappa2 + p21 * u2_scaled + p22 * v2_scaled;
+    BVP3 d2_scaled = xL * kappa2 - x2_scaled;
+    BVP3 n2_scaled = n20 * kappa2 + n21 * u2_scaled + n22 * v2_scaled;
+    BVP3 t21_scaled = n2_scaled.cross(p21);
+    BVP3 t22_scaled = n2_scaled.cross(p22);
+    BVP omega1_scaled_dot_n2_scaled = omega1_scaled.dot(n2_scaled);
+    BVP d2_scaled_dot_n2_scaled = d2_scaled.dot(n2_scaled);
+    Czy = omega1_scaled_dot_n2_scaled * (d2_scaled.dot(t22_scaled)) + d2_scaled_dot_n2_scaled * (omega1_scaled.dot(t22_scaled));
     Czy.printCoefficientsMatrix();
-    BVP cop = d2hat.cross(xL - x1).dot(n2hat);
+    BVP cop = d2_scaled.cross(xL - x1).dot(n2_scaled);
     Cxz = cop;
 
     // ///////////////////////////////////
@@ -685,9 +685,9 @@ int main()
     // BVP norm1 = (p0 - xD).dot(p0 - xD), norm2 = (p1 - xD).dot(p1 - xD), norm3 = (p2 - xD).dot(p2 - xD);
     // const double mu1 = std::max(std::max(norm1.coeffs[0][0], norm2.coeffs[0][0]), norm3.coeffs[0][0]);
 
-    // BVP beta1 = n1hat.dot(n1hat) * d0.dot(d0) - (n1hat.dot(n1hat) * d0.dot(d0) - d0.dot(n1hat) * d0.dot(n1hat)) * BVP(1, 1 / (eta * eta));
+    // BVP beta1 = n1_scaled.dot(n1_scaled) * d0.dot(d0) - (n1_scaled.dot(n1_scaled) * d0.dot(d0) - d0.dot(n1_scaled) * d0.dot(n1_scaled)) * BVP(1, 1 / (eta * eta));
     // beta1 = beta1 * BVP(1, 1 / mu1);
-    // BVP3 first_term = (d0 * n1hat.dot(n1hat) - n1hat * d0.dot(n1hat)) * BVP(1, 1 / eta);
+    // BVP3 first_term = (d0 * n1_scaled.dot(n1_scaled) - n1_scaled * d0.dot(n1_scaled)) * BVP(1, 1 / eta);
     // // 2 degree rational approximant :
     // const double a_0 = 5.88428458e-04, a_1 = 7.61441386e-01, a_2 = 3.40458305e+00,
     //              b_0 = 7.50718012e-02, b_1 = 2.55906806e+00, b_2 = 1.54868566e+00;
@@ -700,30 +700,30 @@ int main()
     // // BVP denominator = BVP(1, b_0) + BVP(1, b_1) * beta1 + BVP(1, b_2) * beta1 * beta1 + BVP(1, b_3) * beta1 * beta1 * beta1;
     // Please refer to the code for piecewise rational approximation
 
-    // BVP3 omega1hat = first_term * denominator * BVP(1, 1 / std::sqrt(mu1)) - n1hat * numerator;
-    // u2hat = omega1hat.cross(p22).dot(x1 - p20);
-    // v2hat = (x1 - p20).cross(p21).dot(omega1hat);
-    // kappa2 = omega1hat.cross(p22).dot(p21);
-    // BVP3 x2hat = p20 * kappa2 + p21 * u2hat + p22 * v2hat;
-    // BVP3 d1hat = x2hat - x1 * kappa2;
-    // BVP3 d2hat = xL * kappa2 - x2hat;
-    // BVP3 n2hat = n20 * kappa2 + n21 * u2hat + n22 * v2hat;
-    // BVP d1_norm2 = d1hat.dot(d1hat);
-    // BVP d2_norm2 = d2hat.dot(d2hat);
-    // BVP3 c1 = d1hat.cross(n2hat);
-    // BVP3 c2 = d2hat.cross(n2hat);
+    // BVP3 omega1_scaled = first_term * denominator * BVP(1, 1 / std::sqrt(mu1)) - n1_scaled * numerator;
+    // u2_scaled = omega1_scaled.cross(p22).dot(x1 - p20);
+    // v2_scaled = (x1 - p20).cross(p21).dot(omega1_scaled);
+    // kappa2 = omega1_scaled.cross(p22).dot(p21);
+    // BVP3 x2_scaled = p20 * kappa2 + p21 * u2_scaled + p22 * v2_scaled;
+    // BVP3 d1_scaled = x2_scaled - x1 * kappa2;
+    // BVP3 d2_scaled = xL * kappa2 - x2_scaled;
+    // BVP3 n2_scaled = n20 * kappa2 + n21 * u2_scaled + n22 * v2_scaled;
+    // BVP d1_norm2 = d1_scaled.dot(d1_scaled);
+    // BVP d2_norm2 = d2_scaled.dot(d2_scaled);
+    // BVP3 c1 = d1_scaled.cross(n2_scaled);
+    // BVP3 c2 = d2_scaled.cross(n2_scaled);
     // BVP3 c = c1 * c1 * d2_norm2 - c2 * c2 * d1_norm2 * BVP(1, eta * eta);
     // Czy = c.bvp[0];
     // // Cxz = c.bvp[1];
     // BVP3 s = xL - x1;
-    // BVP3 cop = ((x2hat - x1 * kappa2).cross(s)).cross(n2hat.cross(s));
+    // BVP3 cop = ((x2_scaled - x1 * kappa2).cross(s)).cross(n2_scaled.cross(s));
     // Cxz = cop.bvp[0];
 
     // Validate
     double val_Czy = Czy.evaluateAtV(ans_v).evaluateAtU(ans_u);
     double val_Cxz = Cxz.evaluateAtV(ans_v).evaluateAtU(ans_u);
-    double val_u2hat = u2hat.evaluateAtV(ans_v).evaluateAtU(ans_u);
-    double val_v2hat = v2hat.evaluateAtV(ans_v).evaluateAtU(ans_u);
+    double val_u2_scaled = u2_scaled.evaluateAtV(ans_v).evaluateAtU(ans_u);
+    double val_v2_scaled = v2_scaled.evaluateAtV(ans_v).evaluateAtU(ans_u);
     double val_kappa2 = kappa2.evaluateAtV(ans_v).evaluateAtU(ans_u);
 
     std::cout << "bvp Czy" << std::endl;
@@ -733,10 +733,10 @@ int main()
     Cxz.printCoefficientsMatrix();
     std::cout << Cxz.coeffs[0][0] << std::endl;
 
-    std::cout << "bvp u2hat" << std::endl;
-    u2hat.printCoefficientsMatrix();
-    std::cout << "bvp v2hat" << std::endl;
-    v2hat.printCoefficientsMatrix();
+    std::cout << "bvp u2_scaled" << std::endl;
+    u2_scaled.printCoefficientsMatrix();
+    std::cout << "bvp v2_scaled" << std::endl;
+    v2_scaled.printCoefficientsMatrix();
     std::cout << "bvp kappa2" << std::endl;
     kappa2.printCoefficientsMatrix();
 
@@ -745,5 +745,5 @@ int main()
     // printUnivariatePolynomialMatrix(bezout);
 
     std::cout << "result Czy=" << val_Czy << "  Cxz=" << val_Cxz << std::endl;
-    std::cout << "u v k " << val_u2hat << " " << val_v2hat << " " << val_kappa2 << std::endl;
+    std::cout << "u v k " << val_u2_scaled << " " << val_v2_scaled << " " << val_kappa2 << std::endl;
 }
