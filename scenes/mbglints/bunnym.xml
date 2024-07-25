@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<scene version="0.6.0">
+	<integrator type="path">
+		<integer name="maxDepth" value="10"/>
+	</integrator>
+
+	<sensor type="perspective">
+		<float name="fov" value="40"/>
+		<string name="fovAxis" value="x"/>
+		<float name="nearClip" value="0.1"/>
+		<transform name="toWorld">
+			<lookat target="-0.538, 0.61, 0" origin="-0.4, 1.75, 3.13" up="0, 1, 0"/>
+		</transform>
+
+		<sampler type="ldsampler">
+			<integer name="sampleCount" value="4"/>
+		</sampler>
+
+		<film type="hdrfilm">
+			<integer name="height" value="1024"/>
+			<integer name="width" value="1024"/>
+			<rfilter type="gaussian"/>
+			<boolean name="banner" value="false"/>
+		</film>
+	</sensor>
+
+	<emitter type="point">
+		<transform name="toWorld">
+			<translate x="1" y="5" z="3"/>
+		</transform>
+		
+		<spectrum name="intensity" value="80"/>
+	</emitter>  
+
+	<bsdf type="conductor" id="metal">
+		<string name="material" value="Ag"/>
+	</bsdf>
+	<bsdf type="conductor" id="ldragon-metal">
+		<string name="material" value="Au"/>
+	</bsdf>
+	<bsdf type="conductor" id="rdragon-metal">
+		<string name="material" value="Cu"/>
+	</bsdf>
+
+	<shape type="obj">
+		<string name="filename" value="mesh/ldragon.obj"/>
+		<ref id="ldragon-metal"/>
+	</shape>
+	<shape type="obj">
+		<string name="filename" value="mesh/rdragon.obj"/>
+		<ref id="rdragon-metal"/>
+	</shape>
+
+	<shape type="obj">
+		<string name="filename" value="mesh/mirror3.obj"/>
+		<ref id="metal"/>
+	</shape>
+
+
+	<bsdf type="diffuse" id="chocolate">
+		<texture name="reflectance" type="scale">
+			<float name="scale" value="0.2"/>
+			<texture type="bitmap">
+				<string name="filename" value="textures/Chocolate__color.png"/>
+			</texture>
+		</texture>
+	</bsdf>
+
+        <bsdf type="diffuse" id="wood">
+            
+            <texture name="reflectance" type="bitmap">
+                <string name="filename" value="textures/wood1.jpg"/>
+                <float name="uscale" value="1000"/>
+                <float name="vscale" value="1000"/>
+            </texture>
+        </bsdf>
+
+		<bsdf type="roughplastic" id="floor">
+        	<float name="alpha" value="0.3"/>
+        	<rgb name="diffuseReflectance" value="0.0075, 0.03, 0.075"/>
+    	</bsdf>
+	<shape type="rectangle">
+		<transform name="toWorld">
+			<scale value="1000"/>
+			<translate y="0"/>
+			<rotate x="1" angle="-90"/>
+		</transform>
+		<ref id="floor"/>
+	</shape>
+	<emitter type="sky">
+		<float name="hour" value="15"/>
+		<float name="turbidity" value="10"/>
+		<float name="scale" value="2"/>
+	</emitter>
+
+</scene>

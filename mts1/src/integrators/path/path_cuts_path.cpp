@@ -265,8 +265,9 @@ public:
                 // value[0] += 0.3 * ans.size();
                 Li += throughput * value;
                 // if(bsdf->getType() & BSDF::ETransmission)
-                if(eta != 1.0)
-                    Li *= (eta);
+
+                // if(eta != 1.0)
+                //     Li *= (eta);
                 
             }
 

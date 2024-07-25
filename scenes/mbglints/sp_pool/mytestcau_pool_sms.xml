@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+
+<scene version="2.0.0">
+    <default name="spp" value="18"/>
+	<include filename="include/mytestcau_pool_mts2core.xml"/>
+
+    <integrator type="path_sms_ss">
+		<integer name="max_depth" value="4"/>
+	</integrator>
+
+
+	
+</scene>

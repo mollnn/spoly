@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<scene version="0.6.0">
+	<default name="useResultant" value="false" />
+	<default name="methodMask" value="0" />
+    <default name="spp" value="16"/>
+    <include filename="include/mytestcau_pool_mts1core.xml"/>
+
+	<integrator type="path_cuts_path">
+		<integer name="maxDepth" value="3"/>
+		<boolean name="useResultant" value="$useResultant"/>
+		<integer name="methodMask" value="$methodMask"/>
+		<integer name="pathcutBounce" value="1"/>
+		<integer name="cutoffMatrix" value="6"/>
+		<integer name="cutoffResultant" value="16"/>
+		<float name="pathcutThres" value="0.0002"/>
+	</integrator>
+
+	<!-- <emitter type="point">
+		<transform name="toWorld">
+			<translate x="0" y="0.5" z="3"/>
+		</transform>
+		<spectrum name="intensity" value="35"/>
+	</emitter>  
+	 <bsdf type="dielectric" id="metal">
+	</bsdf> 
+    
+
+	<shape type="obj">
+        <string name="filename" value="mesh_pool_rotate/water_plane(rectangle).obj"/>
+		<ref id="metal"/>
+		<transform name="toWorld">
+			<translate x="0" y="0" z="0"/>
+		</transform>
+	</shape>
+
+
+    <shape type="obj">
+        <string name="filename" value="mesh_pool_rotate/ladder_steps.obj" />
+        <bsdf type="diffuse">
+            <texture name="reflectance" type="bitmap">
+                <string name="filename" value="textures/[2K]Tiles50/Tiles50_col.jpg"/>
+            </texture>
+        </bsdf>
+    </shape>
+
+    <shape type="obj">
+        <string name="filename" value="mesh_pool_rotate/ladder_metal.obj" />
+        <bsdf type="roughconductor">
+            <string name="distribution" value="ggx"/>
+            <string name="material" value="Ag"/>
+            <float name="alpha" value="0.2"/>
+        </bsdf>
+    </shape>
+
+    <shape type="obj">
+        <string name="filename" value="mesh_pool_rotate/floor1.obj" />
+        <bsdf type="diffuse">
+            <texture name="reflectance" type="bitmap">
+                <string name="filename" value="textures/[2K]Tiles27/Tiles27_col.jpg"/>
+            </texture>
+        </bsdf>
+    </shape>
+    
+    <shape type="obj">
+        <string name="filename" value="mesh_pool_rotate/floor2.obj" />
+        <bsdf type="diffuse">
+            <texture name="reflectance" type="bitmap">
+                <string name="filename" value="textures/[2K]Tiles50/Tiles50_col.jpg"/>
+            </texture>
+        </bsdf>
+    </shape>
+
+    <shape type="obj">
+        <string name="filename" value="mesh_pool_simple/pool_inside.obj" />
+
+        <bsdf type="diffuse">
+            <texture name="reflectance" type="bitmap">
+                <string name="filename" value="textures/[2K]Tiles06/Tiles06_col.png"/>
+            </texture>
+        </bsdf>
+    </shape>
+	
+    <shape type="obj">
+        <string name="filename" value="mesh_pool_simple/pool_border.obj" />
+        <bsdf type="diffuse">
+            <texture name="reflectance" type="bitmap">
+                <string name="filename" value="textures/[2K]Tiles54/Tiles54_col.jpg"/>
+            </texture>
+        </bsdf>
+    </shape> -->
+</scene>

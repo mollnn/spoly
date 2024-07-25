@@ -37,20 +37,20 @@ namespace Resultant
   std::stringstream rss;
 
   // // RR
-  // const int N_DEGREE = 16;
-  // const int N_POLY = 100;
+  const int N_DEGREE = 16;
+  const int N_POLY = 100;
 
   // TT
   // const int N_DEGREE = 54;
   // const int N_POLY = 500;
 
   // R
-  const int N_DEGREE = 4;
-  const int N_POLY = 9;
+  // const int N_DEGREE = 4;
+  // const int N_POLY = 9;
 
   // T
   // const int N_DEGREE = 6;
-  // const int N_POLY = 37;
+  // const int N_POLY = 19;
 
   const int N_MAT = N_DEGREE + 1;
 

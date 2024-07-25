@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<scene version="0.6.0">
+	<default name="useResultant" value="false" />
+	<default name="methodMask" value="0" />
+
+	<integrator type="path_cuts_path">
+		<integer name="maxDepth" value="4"/>
+		<boolean name="useResultant" value="$useResultant"/>
+		<integer name="methodMask" value="$methodMask"/>
+		<integer name="pathcutBounce" value="1"/>
+		<integer name="cutoffMatrix" value="6"/>
+		<integer name="cutoffResultant" value="12"/>
+	</integrator>
+
+	<sensor type="perspective">
+		<float name="fov" value="45"/>
+		<string name="fovAxis" value="x"/>
+		<float name="nearClip" value="0.1"/>
+		<transform name="toWorld">
+			<lookat target="7, -2, -5" origin="-3, 4, 4" up="0, 0, 1"/>
+		</transform>
+
+		<sampler type="independent">
+			<integer name="sampleCount" value="1"/>
+		</sampler>
+
+		<film type="hdrfilm">
+			<integer name="height" value="128"/>
+			<integer name="width" value="128"/>
+			<rfilter type="gaussian"/>
+			<boolean name="banner" value="false"/>
+	</film>
+	</sensor>
+
+	<emitter type="point">
+		<transform name="toWorld">
+			<translate x="3" y="3" z="5"/>
+		</transform>
+		<spectrum name="intensity" value="100"/>
+	</emitter>  
+	 <bsdf type="dielectric" id="metal">
+	</bsdf> 
+    
+
+	<shape type="obj">
+        <string name="filename" value="mesh_pool_rotate/water_plane.obj"/>
+		<ref id="metal"/>
+		<transform name="toWorld">
+			<translate x="0" y="0" z="0.0"/>
+		</transform>
+	</shape>
+
+    <shape type="obj">
+        <string name="filename" value="mesh_pool_simple/pool_inside.obj" />
+
+        <bsdf type="diffuse">
+            <texture name="reflectance" type="bitmap">
+                <string name="filename" value="textures/[2K]Tiles06/Tiles06_col.png"/>
+            </texture>
+        </bsdf>
+    </shape>
+	
+    <shape type="obj">
+        <string name="filename" value="mesh_pool_simple/pool_border.obj" />
+        <bsdf type="diffuse">
+            <texture name="reflectance" type="bitmap">
+                <string name="filename" value="textures/[2K]Tiles54/Tiles54_col.jpg"/>
+            </texture>
+        </bsdf>
+    </shape>
+</scene>

@@ -32,13 +32,25 @@ The implementation builds upon [Mbglints](https://github.com/wangningbei/mbglint
 
 ## Reproduce
 
-We provide several experiments in the `test` dir. Just run them and check the results. Please refer to any additional comments in the scripts.
+We provide several experiments in the `test` dir. Please refer to any additional comments in the scripts.
 
----
+## Available features
 
-Currently, in this repo, only single reflection (R) is fully supported. Other cases will be available soon. 
+Currently, in this repo, only single reflection (R) and refraction (T) is completely supported. 
+
+For double reflection (RR), a serial version without loop unroll or vectorization is available (though very slow). The CUDA source code is also contained (`.cu` and `.cuh` files), but not installed by default.
+
+More features will be available soon. 
 
 Note that although the current code contains implementations for other cases and even alternative building blocks for some parts of the pipeline, they are NOT guaranteed to be correct/complete.
+
+Warning: The sign of refraction is hard-coded. The normal of area light source is hard-coded.
+
+## Update log
+
+2024.7.22: Release R. 
+
+2024.7.25: Release T and RR (CPU).
 
 ---
 

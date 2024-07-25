@@ -1,4 +1,4 @@
-// glintbounce.cpp : 
+// glintbounce.cpp : Defines the entry point for the console application.
 //
 //
 #include "chrono_def.h"
@@ -26,6 +26,20 @@ bool global_log_flag = true;
 #include "resultant.h"
 #include "resultant-simd.h"
 #include <mitsuba/render/sampler.h>
+
+// GPU Version (comment the line below if not required)
+// #define MBGLINTS_RESULTANT_CUDA_WITH_CPU
+
+#ifdef MBGLINTS_RESULTANT_ENABLE_CUDA
+#include "resultant_cuda.cuh"
+#include "cuda_common.cuh"
+extern double get_bezout_matrix_time;
+extern double eval_bezout_matrix_time;
+extern double pick_section_time;
+extern double bisection_solver_time;
+extern double from_bezout_to_gamma_time;
+extern double solve_back_time;
+#endif
 
 using namespace std;
 using namespace Eigen;
@@ -1100,159 +1114,165 @@ public:
 
 		if (use_cuda == 0)
 		{
+			int use_simd = 0;
 #ifdef RESULTANT_SIMD
-			// Only one bounce support
-
-			int i;
-			int origin_size = brsolver_records.size();
-			int simd_size = (brsolver_records.size() + 3) / 4 * 4;
-
-			brsolver_records.resize(simd_size);
-
-			for (i = 0; i < simd_size; i += 4)
-			{
-				auto time_begin = CHRONO_NOW;
-
-				auto &brsolver_record_1 = brsolver_records[i];
-				auto &brsolver_record_2 = brsolver_records[i + 1];
-				auto &brsolver_record_3 = brsolver_records[i + 2];
-				auto &brsolver_record_4 = brsolver_records[i + 3];
-
-				std::vector<double> pX = {
-					brsolver_record_1.p10.x(), brsolver_record_2.p10.x(),
-					brsolver_record_3.p10.x(), brsolver_record_4.p10.x(),
-
-					brsolver_record_1.p12.x(), brsolver_record_2.p12.x(),
-					brsolver_record_3.p12.x(), brsolver_record_4.p12.x(),
-
-					brsolver_record_1.p11.x(), brsolver_record_2.p11.x(),
-					brsolver_record_3.p11.x(), brsolver_record_4.p11.x()};
-
-				std::vector<double> nX = {
-					brsolver_record_1.n10.x(), brsolver_record_2.n10.x(),
-					brsolver_record_3.n10.x(), brsolver_record_4.n10.x(),
-
-					brsolver_record_1.n12.x(), brsolver_record_2.n12.x(),
-					brsolver_record_3.n12.x(), brsolver_record_4.n12.x(),
-
-					brsolver_record_1.n11.x(), brsolver_record_2.n11.x(),
-					brsolver_record_3.n11.x(), brsolver_record_4.n11.x()};
-
-				std::vector<double> pY = {
-					brsolver_record_1.p10.y(), brsolver_record_2.p10.y(),
-					brsolver_record_3.p10.y(), brsolver_record_4.p10.y(),
-
-					brsolver_record_1.p12.y(), brsolver_record_2.p12.y(),
-					brsolver_record_3.p12.y(), brsolver_record_4.p12.y(),
-
-					brsolver_record_1.p11.y(), brsolver_record_2.p11.y(),
-					brsolver_record_3.p11.y(), brsolver_record_4.p11.y()};
-
-				std::vector<double> nY = {
-					brsolver_record_1.n10.y(), brsolver_record_2.n10.y(),
-					brsolver_record_3.n10.y(), brsolver_record_4.n10.y(),
-
-					brsolver_record_1.n12.y(), brsolver_record_2.n12.y(),
-					brsolver_record_3.n12.y(), brsolver_record_4.n12.y(),
-
-					brsolver_record_1.n11.y(), brsolver_record_2.n11.y(),
-					brsolver_record_3.n11.y(), brsolver_record_4.n11.y()};
-
-				std::vector<double> pZ = {
-					brsolver_record_1.p10.z(), brsolver_record_2.p10.z(),
-					brsolver_record_3.p10.z(), brsolver_record_4.p10.z(),
-
-					brsolver_record_1.p12.z(), brsolver_record_2.p12.z(),
-					brsolver_record_3.p12.z(), brsolver_record_4.p12.z(),
-
-					brsolver_record_1.p11.z(), brsolver_record_2.p11.z(),
-					brsolver_record_3.p11.z(), brsolver_record_4.p11.z()};
-
-				std::vector<double> nZ = {
-					brsolver_record_1.n10.z(), brsolver_record_2.n10.z(),
-					brsolver_record_3.n10.z(), brsolver_record_4.n10.z(),
-
-					brsolver_record_1.n12.z(), brsolver_record_2.n12.z(),
-					brsolver_record_3.n12.z(), brsolver_record_4.n12.z(),
-
-					brsolver_record_1.n11.z(), brsolver_record_2.n11.z(),
-					brsolver_record_3.n11.z(), brsolver_record_4.n11.z()};
-
-				auto solutions = resultant_simd::solve(
-					chain_type,
-					{m_camera->getPos().x(), m_camera->getPos().y(),
-					 m_camera->getPos().z()},
-					{m_lightPos.x(), m_lightPos.y(), m_lightPos.z()}, pX, pY, pZ, nX,
-					nY, nZ, use_resultant_fft, config_cutoff_matrix,
-					config_cutoff_resultant, config_cutoff_eps_resultant, methodMask);
-
-				brsolver_record_1.solutions = solutions[0];
-				brsolver_record_2.solutions = solutions[1];
-				brsolver_record_3.solutions = solutions[2];
-				brsolver_record_4.solutions = solutions[3];
-
-				auto time_end = CHRONO_NOW;
-				double us = CHRONO_DIFF(
-								time_end - time_begin) *
-							1e-3;
-
-				total_solver_time += us;
-				total_solver_count += 4;
-			}
-
-			brsolver_records.resize(origin_size);
-
-#else
-			for (int i = 0; i < brsolver_records.size(); i++)
-			{
-				if (i % 10000 == 0)
-				{
-					if (global_log_flag)
-						std::cout << "proc " << i << std::endl;
-				}
-				auto &brsolver_record = brsolver_records[i];
-
-				auto time_begin = CHRONO_NOW;
-
-				Vec3 p10 = brsolver_record.p10;
-				Vec3 p11 = brsolver_record.p11;
-				Vec3 p12 = brsolver_record.p12;
-				Vec3 n10 = brsolver_record.n10;
-				Vec3 n11 = brsolver_record.n11;
-				Vec3 n12 = brsolver_record.n12;
-
-				Vec3 p20 = brsolver_record.p20;
-				Vec3 p21 = brsolver_record.p21;
-				Vec3 p22 = brsolver_record.p22;
-				Vec3 n20 = brsolver_record.n20;
-				Vec3 n21 = brsolver_record.n21;
-				Vec3 n22 = brsolver_record.n22;
-
-				brsolver_record.solutions = Resultant::solve(
-					chain_type,
-					{m_camera->getPos().x(), m_camera->getPos().y(),
-					 m_camera->getPos().z()},
-					{m_lightPos.x(), m_lightPos.y(), m_lightPos.z()},
-					{p10.x(), p10.y(), p10.z()}, {n10.x(), n10.y(), n10.z()},
-					{p11.x(), p11.y(), p11.z()}, {n11.x(), n11.y(), n11.z()},
-					{p12.x(), p12.y(), p12.z()}, {n12.x(), n12.y(), n12.z()},
-					{p20.x(), p20.y(), p20.z()}, {n20.x(), n20.y(), n20.z()},
-					{p21.x(), p21.y(), p21.z()}, {n21.x(), n21.y(), n21.z()},
-					{p22.x(), p22.y(), p22.z()}, {n22.x(), n22.y(), n22.z()},
-					use_resultant_fft, config_cutoff_matrix, config_cutoff_resultant,
-					config_cutoff_eps_resultant, methodMask, maxIterationDichotomy);
-
-				auto time_end = CHRONO_NOW;
-				double us = CHRONO_DIFF(
-								time_end - time_begin) *
-							1e-3;
-
-				total_solver_time += us;
-				total_solver_count += 1;
-			}
-			if (global_log_flag)
-				Resultant::printStats(false);
+			use_simd = 1;
 #endif
+			if (use_simd && chain_type < 10)  {
+				// Only one bounce support
+
+				int i;
+				int origin_size = brsolver_records.size();
+				int simd_size = (brsolver_records.size() + 3) / 4 * 4;
+
+				brsolver_records.resize(simd_size);
+
+				for (i = 0; i < simd_size; i += 4)
+				{
+					auto time_begin = CHRONO_NOW;
+
+					auto &brsolver_record_1 = brsolver_records[i];
+					auto &brsolver_record_2 = brsolver_records[i + 1];
+					auto &brsolver_record_3 = brsolver_records[i + 2];
+					auto &brsolver_record_4 = brsolver_records[i + 3];
+
+					std::vector<double> pX = {
+						brsolver_record_1.p10.x(), brsolver_record_2.p10.x(),
+						brsolver_record_3.p10.x(), brsolver_record_4.p10.x(),
+
+						brsolver_record_1.p12.x(), brsolver_record_2.p12.x(),
+						brsolver_record_3.p12.x(), brsolver_record_4.p12.x(),
+
+						brsolver_record_1.p11.x(), brsolver_record_2.p11.x(),
+						brsolver_record_3.p11.x(), brsolver_record_4.p11.x()};
+
+					std::vector<double> nX = {
+						brsolver_record_1.n10.x(), brsolver_record_2.n10.x(),
+						brsolver_record_3.n10.x(), brsolver_record_4.n10.x(),
+
+						brsolver_record_1.n12.x(), brsolver_record_2.n12.x(),
+						brsolver_record_3.n12.x(), brsolver_record_4.n12.x(),
+
+						brsolver_record_1.n11.x(), brsolver_record_2.n11.x(),
+						brsolver_record_3.n11.x(), brsolver_record_4.n11.x()};
+
+					std::vector<double> pY = {
+						brsolver_record_1.p10.y(), brsolver_record_2.p10.y(),
+						brsolver_record_3.p10.y(), brsolver_record_4.p10.y(),
+
+						brsolver_record_1.p12.y(), brsolver_record_2.p12.y(),
+						brsolver_record_3.p12.y(), brsolver_record_4.p12.y(),
+
+						brsolver_record_1.p11.y(), brsolver_record_2.p11.y(),
+						brsolver_record_3.p11.y(), brsolver_record_4.p11.y()};
+
+					std::vector<double> nY = {
+						brsolver_record_1.n10.y(), brsolver_record_2.n10.y(),
+						brsolver_record_3.n10.y(), brsolver_record_4.n10.y(),
+
+						brsolver_record_1.n12.y(), brsolver_record_2.n12.y(),
+						brsolver_record_3.n12.y(), brsolver_record_4.n12.y(),
+
+						brsolver_record_1.n11.y(), brsolver_record_2.n11.y(),
+						brsolver_record_3.n11.y(), brsolver_record_4.n11.y()};
+
+					std::vector<double> pZ = {
+						brsolver_record_1.p10.z(), brsolver_record_2.p10.z(),
+						brsolver_record_3.p10.z(), brsolver_record_4.p10.z(),
+
+						brsolver_record_1.p12.z(), brsolver_record_2.p12.z(),
+						brsolver_record_3.p12.z(), brsolver_record_4.p12.z(),
+
+						brsolver_record_1.p11.z(), brsolver_record_2.p11.z(),
+						brsolver_record_3.p11.z(), brsolver_record_4.p11.z()};
+
+					std::vector<double> nZ = {
+						brsolver_record_1.n10.z(), brsolver_record_2.n10.z(),
+						brsolver_record_3.n10.z(), brsolver_record_4.n10.z(),
+
+						brsolver_record_1.n12.z(), brsolver_record_2.n12.z(),
+						brsolver_record_3.n12.z(), brsolver_record_4.n12.z(),
+
+						brsolver_record_1.n11.z(), brsolver_record_2.n11.z(),
+						brsolver_record_3.n11.z(), brsolver_record_4.n11.z()};
+
+					auto solutions = resultant_simd::solve(
+						chain_type,
+						{m_camera->getPos().x(), m_camera->getPos().y(),
+						m_camera->getPos().z()},
+						{m_lightPos.x(), m_lightPos.y(), m_lightPos.z()}, pX, pY, pZ, nX,
+						nY, nZ, use_resultant_fft, config_cutoff_matrix,
+						config_cutoff_resultant, config_cutoff_eps_resultant, methodMask);
+
+					brsolver_record_1.solutions = solutions[0];
+					brsolver_record_2.solutions = solutions[1];
+					brsolver_record_3.solutions = solutions[2];
+					brsolver_record_4.solutions = solutions[3];
+
+					auto time_end = CHRONO_NOW;
+					double us = CHRONO_DIFF(
+									time_end - time_begin) *
+								1e-3;
+
+					total_solver_time += us;
+					total_solver_count += 4;
+				}
+
+				brsolver_records.resize(origin_size);
+			}
+			else {
+				for (int i = 0; i < brsolver_records.size(); i++)
+				{
+					if (i % 10000 == 0)
+					{
+						if (global_log_flag) {
+							std::cout << "! Warning: You are running an unoptimized version. The performance may be significantly slower." << std::endl;
+							std::cout << "proc " << i << std::endl;
+						}
+					}
+					auto &brsolver_record = brsolver_records[i];
+
+					auto time_begin = CHRONO_NOW;
+
+					Vec3 p10 = brsolver_record.p10;
+					Vec3 p11 = brsolver_record.p11;
+					Vec3 p12 = brsolver_record.p12;
+					Vec3 n10 = brsolver_record.n10;
+					Vec3 n11 = brsolver_record.n11;
+					Vec3 n12 = brsolver_record.n12;
+
+					Vec3 p20 = brsolver_record.p20;
+					Vec3 p21 = brsolver_record.p21;
+					Vec3 p22 = brsolver_record.p22;
+					Vec3 n20 = brsolver_record.n20;
+					Vec3 n21 = brsolver_record.n21;
+					Vec3 n22 = brsolver_record.n22;
+
+					brsolver_record.solutions = Resultant::solve(
+						chain_type,
+						{m_camera->getPos().x(), m_camera->getPos().y(),
+						m_camera->getPos().z()},
+						{m_lightPos.x(), m_lightPos.y(), m_lightPos.z()},
+						{p10.x(), p10.y(), p10.z()}, {n10.x(), n10.y(), n10.z()},
+						{p11.x(), p11.y(), p11.z()}, {n11.x(), n11.y(), n11.z()},
+						{p12.x(), p12.y(), p12.z()}, {n12.x(), n12.y(), n12.z()},
+						{p20.x(), p20.y(), p20.z()}, {n20.x(), n20.y(), n20.z()},
+						{p21.x(), p21.y(), p21.z()}, {n21.x(), n21.y(), n21.z()},
+						{p22.x(), p22.y(), p22.z()}, {n22.x(), n22.y(), n22.z()},
+						use_resultant_fft, config_cutoff_matrix, config_cutoff_resultant,
+						config_cutoff_eps_resultant, methodMask, maxIterationDichotomy);
+
+					auto time_end = CHRONO_NOW;
+					double us = CHRONO_DIFF(
+									time_end - time_begin) *
+								1e-3;
+
+					total_solver_time += us;
+					total_solver_count += 1;
+				}
+				if (global_log_flag)
+					Resultant::printStats(false);
+			}
 		}
 	}
 
@@ -1390,8 +1410,8 @@ public:
 				sign[1] = m_shapes[is]->m_bsdf1->getSign();
 				eta[1] = m_shapes[is]->m_bsdf1->getEta();
 
-				// #pragma omp parallel for schedule(dynamic)
 				auto time_begin = CHRONO_NOW;
+				// #pragma omp parallel for schedule(dynamic)
 				for (int i = 0; i < size; i++)
 				{
 					int tid = 0; // !

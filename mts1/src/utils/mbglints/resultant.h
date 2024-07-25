@@ -135,7 +135,7 @@ namespace Resultant
 
             BVP3 s = xL - xD;
             BVP3 cop = (d0.cross(s)).cross(n1hat.cross(s));
-            Cxz = cop.bvp[0] + cop.bvp[1] + cop.bvp[2];
+            Cxz = cop.bvp[0];
 
             valid_v_min = vmin;
             valid_v_max = vmax;

@@ -21,7 +21,7 @@ constexpr size_t N_DEGREE = 4;
 constexpr size_t N_POLY = 9;
 constexpr size_t N_MAT = N_DEGREE + 1;
 
-constexpr size_t UNIPOLYMAT_MAX_DEG = 16; // cannot be modify
+constexpr size_t UNIPOLYMAT_MAX_DEG = 8; // cannot be modify
 
 int global_poly_cutoff = N_POLY - 1;
 double global_poly_cutoff_eps = 1e-9;
@@ -39791,7 +39791,7 @@ std::vector<
 
 // clang-format on
 
-// #define OPTIMIZED_ONEBOUNCE_DET
+#define OPTIMIZED_ONEBOUNCE_DET
 
 #ifndef OPTIMIZED_ONEBOUNCE_DET
 
@@ -54047,6 +54047,11 @@ UnivariatePolyMatrix<6ul>::determinant() const {
       unpacked_poly[12][3], unpacked_poly[13][3], unpacked_poly[14][3],
       unpacked_poly[15][3], unpacked_poly[16][3]};
 
+
+    result.push_back(Resultant::UnivariatePolynomial(poly_0));
+    result.push_back(Resultant::UnivariatePolynomial(poly_1));
+    result.push_back(Resultant::UnivariatePolynomial(poly_2));
+    result.push_back(Resultant::UnivariatePolynomial(poly_3));
 //   res_0.push_back(std::make_pair(Resultant::UnivariatePolynomial(poly_0),
 //                                  std::make_pair(0.0, 1.0)));
 //   res_1.push_back(std::make_pair(Resultant::UnivariatePolynomial(poly_1),
@@ -54066,8 +54071,7 @@ UnivariatePolyMatrix<6ul>::determinant() const {
 #else
 
 template <>
-std::vector<std::vector<
-    Resultant::UnivariatePolynomial>
+std::vector<Resultant::UnivariatePolynomial>
 UnivariatePolyMatrix<6ul>::determinant() const {
 
   __m256d res_poly[17];
@@ -54093,22 +54097,9 @@ UnivariatePolyMatrix<6ul>::determinant() const {
 
   double unpacked_poly[17][4];
 
-  std::vector<std::vector<
+  std::vector<
       Resultant::UnivariatePolynomial>
       result;
-
-  std::vector<
-      Resultant::UnivariatePolynomial
-      res_0;
-  std::vector<
-      Resultant::UnivariatePolynomial
-      res_1;
-  std::vector<
-      Resultant::UnivariatePolynomial
-      res_2;
-  std::vector<
-      Resultant::UnivariatePolynomial
-      res_3;
 
   _mm256_store_pd(&unpacked_poly[0][0], res_poly[0]);
   _mm256_store_pd(&unpacked_poly[1][0], res_poly[1]);
@@ -54157,20 +54148,10 @@ UnivariatePolyMatrix<6ul>::determinant() const {
       unpacked_poly[12][3], unpacked_poly[13][3], unpacked_poly[14][3],
       unpacked_poly[15][3], unpacked_poly[16][3]};
 
-  res_0.push_back(std::make_pair(Resultant::UnivariatePolynomial(poly_0),
-                                 std::make_pair(0.0, 1.0)));
-  res_1.push_back(std::make_pair(Resultant::UnivariatePolynomial(poly_1),
-                                 std::make_pair(0.0, 1.0)));
-  res_2.push_back(std::make_pair(Resultant::UnivariatePolynomial(poly_2),
-                                 std::make_pair(0.0, 1.0)));
-  res_3.push_back(std::make_pair(Resultant::UnivariatePolynomial(poly_3),
-                                 std::make_pair(0.0, 1.0)));
-
-  result.emplace_back(res_0);
-  result.emplace_back(res_1);
-  result.emplace_back(res_2);
-  result.emplace_back(res_3);
-
+result.push_back(Resultant::UnivariatePolynomial(poly_0));
+result.push_back(Resultant::UnivariatePolynomial(poly_1));
+result.push_back(Resultant::UnivariatePolynomial(poly_2));
+result.push_back(Resultant::UnivariatePolynomial(poly_3));
   return result;
 }
 
@@ -54378,7 +54359,7 @@ solve(int chain_type,                 // 1R, 2T
 
     BVP3 s = xL - xD;
     BVP3 cop = (d0.cross(s)).cross(n1hat.cross(s));
-    BVP Cxz = cop.x + cop.y + cop.z;
+    BVP Cxz = cop.x;
 
     auto ___coeff_end = CHRONO_NOW;
 
@@ -54417,18 +54398,14 @@ solve(int chain_type,                 // 1R, 2T
 
     auto solve_time_begin = CHRONO_NOW;
     //  //! SIMD Optimization only support m=0
-    //res[0] = Resultant::solve_equ(
-    //    dets[0], Resultant::UnivariatePolynomialMatrix(), Cxz_4[0], u2hat,
-    //    v2hat, kappa2, 1, valid_v_min, valid_v_max);
-    //res[1] = Resultant::solve_equ(
-    //    dets[1], Resultant::UnivariatePolynomialMatrix(), Cxz_4[1], u2hat,
-    //    v2hat, kappa2, 1, valid_v_min, valid_v_max);
-    //res[2] = Resultant::solve_equ(
-    //    dets[2], Resultant::UnivariatePolynomialMatrix(), Cxz_4[2], u2hat,
-    //    v2hat, kappa2, 1, valid_v_min, valid_v_max);
-    //res[3] = Resultant::solve_equ(
-    //    dets[3], Resultant::UnivariatePolynomialMatrix(), Cxz_4[3], u2hat,
-    //    v2hat, kappa2, 1, valid_v_min, valid_v_max);
+    res[0] = Resultant::solve_equ(
+        dets[0], Cxz_4[0], 2);
+    res[1] = Resultant::solve_equ(
+        dets[1], Cxz_4[1], 2);
+    res[2] = Resultant::solve_equ(
+        dets[2], Cxz_4[2], 2);
+    res[3] = Resultant::solve_equ(
+        dets[3], Cxz_4[3], 2);
     auto solve_time_end = CHRONO_NOW;
 
 #ifdef ENABLE_TIME_COUNT

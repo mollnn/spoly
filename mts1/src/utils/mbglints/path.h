@@ -144,7 +144,7 @@ public:
 		vertices.swap(path);
 	}
 // #define REFLECTION_PATH
-#define REFRACTION_PATH
+// #define REFRACTION_PATH
 
 	Vec3 computeContribution() const
 	{
@@ -180,23 +180,13 @@ public:
 		}
 #endif
 #ifdef REFRACTION_PATH
-		if (pathType_glb == 2)
-		{
-			// printf("%d\n", pathLength);
-
-			// refraction
-			Vec3 n = Vec3(0, 0.0, -1.0);
-			Vec3 l2p = (vertices[1].m_pos - light.m_pos).normalized();
-			cosTheta = l2p.dot(n);
-		}
-		else if (pathType_glb == 1)
-		{
-			// reflection
-
-			Vec3 n = Vec3(0, -1.0, 0.0);
-			Vec3 l2p = (vertices[1].m_pos - light.m_pos).normalized();
-			cosTheta = l2p.dot(n);
-		}
+		 if(pathLength >= 2)
+		 {
+		 	// refraction
+		 	Vec3 n = Vec3(0, 0.0, -1.0);
+		 	Vec3 l2p = (vertices[1].m_pos - light.m_pos).normalized();
+		 	cosTheta = l2p.dot(n);
+		 }
 #endif
 		for (int i = 1; i < pathLength - 1; i++)
 		{

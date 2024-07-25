@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<scene version="0.6.0">
+	<default name="useResultant" value="false" />
+	<default name="methodMask" value="0" />
+    <default name="spp" value="1"/>
+
+	<integrator type="path_cuts_path">
+		<integer name="maxDepth" value="4"/>
+		<boolean name="useResultant" value="$useResultant"/>
+		<integer name="methodMask" value="$methodMask"/>
+		<integer name="pathcutBounce" value="1"/>
+		<integer name="cutoffMatrix" value="6"/>
+		<integer name="cutoffResultant" value="16"/>
+		<float name="pathcutThres" value="0.0001"/>
+	</integrator>
+
+	<sensor type="perspective">
+		<float name="fov" value="37"/>
+		<string name="fovAxis" value="x"/>
+		<float name="nearClip" value="0.1"/>
+		<transform name="toWorld">
+			<lookat target="7, 5, -5" origin="0, 0, 2" up="0, 0, 1"/>
+		</transform>
+
+		<sampler type="independent">
+			<integer name="sampleCount" value="8"/>
+		</sampler>
+
+		<film type="hdrfilm">
+			<integer name="height" value="256"/>
+			<integer name="width" value="256"/>
+			<integer name="cropHeight" value="120"/>
+			<integer name="cropWidth" value="120"/>
+			<integer name="cropOffsetX" value="20"/>
+			<integer name="cropOffsetY" value="20"/>
+			<rfilter type="gaussian"/>
+	</film>
+	</sensor>
+
+	<emitter type="point">
+		<transform name="toWorld">
+			<translate x="1" y="0.5" z="3"/>
+		</transform>
+		<spectrum name="intensity" value="35"/>
+	</emitter>  
+	 <bsdf type="dielectric" id="metal">
+	</bsdf>
+
+    <!-- <shape type="obj">
+        <string name="filename" value="mesh_pool_rotate/torus.obj" />
+        <bsdf type="diffuse">
+            <rgb name="reflectance" value="0.8, 0.126, 0.407"/>
+        </bsdf>
+    </shape> -->
+    <shape type="obj">
+        <string name="filename" value="../mesh_pool_rotate/step.obj" />
+        <bsdf type="diffuse">
+            <texture name="reflectance" type="bitmap">
+                <string name="filename" value="../textures/[2K]Tiles06/Tiles06_col.png"/>
+            </texture>
+        </bsdf>
+    </shape>
+
+	<shape type="obj">
+        <string name="filename" value="../mesh_pool_rotate/water_plane(fined).obj"/>
+		<ref id="metal"/>
+		<transform name="toWorld">
+			<translate x="0" y="0" z="0"/>
+		</transform>
+	</shape> 
+
+    <shape type="obj">
+        <string name="filename" value="../mesh_pool_rotate/ladder_steps.obj" />
+        <bsdf type="diffuse">
+            <texture name="reflectance" type="bitmap">
+                <string name="filename" value="../textures/[2K]Tiles50/Tiles50_col.jpg"/>
+            </texture>
+        </bsdf>
+    </shape>
+
+    <shape type="obj">
+        <string name="filename" value="../mesh_pool_rotate/ladder_metal.obj" />
+        <bsdf type="roughconductor">
+            <string name="distribution" value="ggx"/>
+            <string name="material" value="Ag"/>
+            <float name="alpha" value="0.2"/>
+        </bsdf>
+    </shape>
+
+    <shape type="obj">
+        <string name="filename" value="../mesh_pool_rotate/floor1.obj" />
+        <bsdf type="diffuse">
+            <texture name="reflectance" type="bitmap">
+                <string name="filename" value="../textures/[2K]Tiles27/Tiles27_col.jpg"/>
+            </texture>
+        </bsdf>
+    </shape>
+
+    <shape type="obj">
+        <string name="filename" value="../mesh_pool_rotate/floor2.obj" />
+        <bsdf type="diffuse">
+            <texture name="reflectance" type="bitmap">
+                <string name="filename" value="../textures/[2K]Tiles50/Tiles50_col.jpg"/>
+            </texture>
+        </bsdf>
+    </shape>
+
+    <shape type="obj">
+        <string name="filename" value="../mesh_pool_simple/pool_inside.obj" />
+
+        <bsdf type="diffuse">
+            <texture name="reflectance" type="bitmap">
+                <string name="filename" value="../textures/[2K]Tiles06/Tiles06_col.png"/>
+            </texture>
+        </bsdf>
+    </shape>
+	
+	
+    <shape type="obj">
+        <string name="filename" value="../mesh_pool_simple/pool_border.obj" />
+        <bsdf type="diffuse">
+            <texture name="reflectance" type="bitmap">
+                <string name="filename" value="../textures/[2K]Tiles54/Tiles54_col.jpg"/>
+            </texture>
+        </bsdf>
+    </shape>
+
+
+</scene>

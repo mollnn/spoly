@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+
+<scene version="2.0.0">
+	<default name="useResultant" value="false" />
+	<default name="methodMask" value="0" />
+    <default name="spp" value="1"/>
+	<default name="multiEmitter" value="false"/>
+
+    <sensor type="perspective">
+		<float name="fov" value="80"/>
+		<transform name="to_world">
+			<lookat target="9, 8, -5.2" origin="-2, 1, 0.5" up="0, 0, 1"/>
+		</transform>
+
+		<sampler type="independent">
+			<integer name="sample_count" value="$spp"/>
+		</sampler>
+
+		<film type="hdrfilm">
+			<integer name="height" value="512"/>
+			<integer name="width" value="512"/>
+			<rfilter type="gaussian"/>
+	</film>
+	</sensor>
+
+	<emitter type="point">
+		<transform name="to_world">
+			<translate x="0" y="-0.25" z="2"/>
+		</transform>
+		<spectrum name="intensity" value="50"/>
+        <boolean name="caustic_emitter_single" value="true"/>
+        <boolean name="caustic_emitter_multi" value="true"/>
+	</emitter>  
+    <!-- <shape type="rectangle">
+        <transform name="to_world">
+            <rotate x="-1" angle="90"/>
+            <scale x="0.01" y="0.01" z="0.01"/>
+            <translate x="0" y="-0.25" z="2"/>
+        </transform>
+        <emitter type="area">
+            <spectrum name="radiance" value="500000"/>
+                    <boolean name="caustic_emitter_single" value="true"/>
+        <boolean name="caustic_emitter_multi" value="true"/>
+        </emitter>
+    </shape>
+     -->
+
+	 <bsdf type="dielectric" id="metal">
+	</bsdf> 
+<!-- add more objects here -->
+    <shape type="obj">
+        <!-- <string name="filename" value="../mesh_pool_rotate/water_plane(fined).obj"/> -->
+        <string name="filename" value="opsr_new.obj"/>
+		<ref id="metal"/>
+		<transform name="to_world">
+			<translate x="0" y="0" z="0.0"/>
+		</transform>
+        <boolean name="caustic_caster_single" value="true"/>
+        <boolean name="caustic_caster_multi" value="true"/>
+	</shape>
+
+    <shape type="obj">
+        <string name="filename" value="../mesh_pool_simple/pool_inside.obj" />
+
+        <bsdf type="diffuse">
+            <texture name="reflectance" type="bitmap">
+                <string name="filename" value="../textures/[2K]Tiles06/Tiles06_col.png"/>
+            </texture>
+        </bsdf>
+        <boolean name="caustic_receiver" value="true"/>
+
+    </shape>
+
+
+    <shape type="obj">
+        <string name="filename" value="../mesh_pool_simple/pool_inside.obj" />
+
+        <bsdf type="diffuse">
+            <texture name="reflectance" type="bitmap">
+                <string name="filename" value="../textures/[2K]Tiles06/Tiles06_col.png"/>
+            </texture>
+        </bsdf>
+        <boolean name="caustic_receiver" value="true"/>
+    </shape>
+
+
+    <shape type="obj">
+        <string name="filename" value="../mesh_pool_simple/pool_border.obj" />
+        <bsdf type="diffuse">
+            <texture name="reflectance" type="bitmap">
+                <string name="filename" value="../textures/[2K]Tiles54/Tiles54_col.jpg"/>
+            </texture>
+        </bsdf>
+        <boolean name="caustic_receiver" value="true"/>
+    </shape>
+
+    <shape type="obj">
+        <string name="filename" value="../mesh_pool_rotate/ladder_steps.obj" />
+        <bsdf type="diffuse">
+            <texture name="reflectance" type="bitmap">
+                <string name="filename" value="../textures/[2K]Tiles50/Tiles50_col.jpg"/>
+            </texture>
+        </bsdf>
+    </shape>
+
+    <shape type="obj">
+        <string name="filename" value="../mesh_pool_rotate/ladder_metal.obj" />
+        <bsdf type="roughconductor">
+            <string name="distribution" value="ggx"/>
+            <string name="material" value="Ag"/>
+            <float name="alpha" value="0.5"/>
+        </bsdf>
+    </shape>
+
+    <shape type="obj">
+        <string name="filename" value="../mesh_pool_rotate/floor1.obj" />
+        <bsdf type="diffuse">
+            <texture name="reflectance" type="bitmap">
+                <string name="filename" value="../textures/[2K]Tiles27/Tiles27_col.jpg"/>
+            </texture>
+        </bsdf>
+    </shape>
+
+    <shape type="obj">
+        <string name="filename" value="../mesh_pool_rotate/floor2.obj" />
+        <bsdf type="diffuse">
+            <texture name="reflectance" type="bitmap">
+                <string name="filename" value="../textures/[2K]Tiles50/Tiles50_col.jpg"/>
+            </texture>
+        </bsdf>
+    </shape>
+
+    <!-- <shape type="obj">
+        <string name="filename" value="../mesh_pool_rotate/step.obj" />
+        <bsdf type="diffuse">
+            <texture name="reflectance" type="bitmap">
+                <string name="filename" value="../textures/[2K]Tiles06/Tiles06_col.png"/>
+            </texture>
+        </bsdf>
+    </shape> -->
+
+
+</scene>
