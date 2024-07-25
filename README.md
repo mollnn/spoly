@@ -70,3 +70,8 @@ Our solution is generic, completely deterministic, accurate for the case of one 
 
 [Paper](https://zhiminfan.work/paper/spoly_preprint.pdf)
 [Supplemental](https://zhiminfan.work/paper/spoly_preprint_supp.pdf)
+
+
+## Acknowledgement
+
+Some scenes are modified from [SMS](https://github.com/tizian/specular-manifold-sampling). The implementation builds upon [Mbglints](https://github.com/wangningbei/mbglints) and [CyPolynomials](http://codebase.cemyuksel.com/code.html). We sincerely thank the authors for kindly release their code and scenes, as well as their great works.
