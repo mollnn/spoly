@@ -9,7 +9,7 @@ Chenxi Zhou, Zhenyu Chen, Pengpei Hong, Yanwen Guo, Ling-Qi Yan
 A reformulation of specular constraints into polynomial systems that enables efficiently finding a complete set of all admissible specular paths connecting two arbitrary endpoints in a scene, by converting the problem into finding zeros of the determinant of univariate matrix polynomials.
 
 
-## Standalone demo
+## Standalone demo: constraint validator
 
 We provide a minimalist demo: **a single** cpp source file `standalone.cpp` that only relies on the C++ standard libraries, which could help you understand how the method works without diving into the full project.
 
@@ -32,7 +32,17 @@ The implementation builds upon [Mbglints](https://github.com/wangningbei/mbglint
 
 ## Reproduce
 
-We provide several experiments in the `test` dir. Please refer to any additional comments in the scripts.
+We provide several experiments in the `test` dir. 
+
+- Fig. 06: Plane (equal-time comparisons with stochastic methods).
+
+- Fig. 08: Plane and Pool (ablation studies to compare with Newton's method using heuristic seeds).
+
+- Table 4: Timing for single reflection. Please enable the timing macro in `chrono_def.h`.
+
+- Fig. 05: Glints rendering for double reflections. Currently it is an unoptimized scalar CPU version. Faster ones will be available soon.
+
+Please refer to any additional comments in the scripts.
 
 ## Available features
 
