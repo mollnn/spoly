@@ -239,10 +239,6 @@ public:
             /*                     Specular path sampling                           */
             /* ==================================================================== */
             if (bsdf->getType() & BSDF::ESmooth) {
-
-                // todo: move to class member
-                // todo: bsdf
-                // todo: spectrum
                 if (bgr == nullptr) {
                     bgr = new BounceGlintRenderer((Scene*)scene, false);
                 }
@@ -250,7 +246,6 @@ public:
                     bgr->setEmitter((Scene*)scene, true);
                 bgr->use_resultant = m_useResultant;
                 bgr->methodMask = m_methodMask;
-                // todo: cutoff as param
                 bgr->config_ouritrCount = 1;
                 bgr->config_cutoff_matrix = m_cutoffMatrix;
                 bgr->config_cutoff_resultant = m_cutoffResultant;
@@ -262,13 +257,7 @@ public:
                     float vv[3] = { v[0], v[1], v[2] };
                     value += bsdf->eval(brec_tmp) * Spectrum(vv);
                 }
-                // value[0] += 0.3 * ans.size();
                 Li += throughput * value;
-                // if(bsdf->getType() & BSDF::ETransmission)
-
-                // if(eta != 1.0)
-                //     Li *= (eta);
-                
             }
 
             /* ==================================================================== */
