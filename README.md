@@ -36,7 +36,7 @@ We provide several experiments in the `test` dir.
 
 - Fig. 5: Glints rendering for double reflections. Currently it is an unoptimized scalar CPU version. Faster ones will be available soon.
 
-Please refer to any additional comments in the scripts.
+Please refer to any additional comments in the scripts. One may have to switch the macros `N_DEGREE, N_POLY` in `resultant_common.h` and `ENABLE_TIME_COUNT` in `chrono_def.h` to reproduce the performance.
 
 ## Available features
 
