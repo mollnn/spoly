@@ -11,6 +11,8 @@ Just build it with any modern C++ compiler (g++, msvc, ...) and check how the ve
 
 ## Build the complete project
 
+The project is based on https://github.com/VicentChen/mitsuba. Please install the dependency first.
+
 ```
 cd mts1
 mkdir cbuild
